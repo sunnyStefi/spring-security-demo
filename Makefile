@@ -1,4 +1,4 @@
 demo-basic-private:
-	curl -vu rickGrimes:1985 http://localhost:8080/private
+	curl -vu user:xyz http://localhost:8080/private
 
 
