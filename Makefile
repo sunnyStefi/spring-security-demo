@@ -9,7 +9,3 @@ custom-users:
 ## 3 custom-filter
 custom-filter:
 	curl -vu rickGrimes:sheriff123 -H "x-safe-zone:123" http://localhost:8080/private
-
-## 4 custom-provider
-custom-provider:
-	curl -H "x-safe-zone:123" http://localhost:8080/private
