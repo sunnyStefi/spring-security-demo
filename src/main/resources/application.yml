@@ -7,6 +7,10 @@ spring:
             client-id: xxx
             client-secret: xxx
 
+app:
+  safe-zone:
+    secret: "123"  # Secret for the safe zone header
+
 logging:
   level:
     org.springframework.security: TRACE
