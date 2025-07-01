@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping
 class ZoneController{
 
     @GetMapping("/safe-zone")
-    fun home(): String {
+    fun safeZone(): String {
         return "safe-zone"
     }
 
     @GetMapping("/zombie-zone")
-    fun beach(): String {
+    fun zombieZone(): String {
         return "zombie-zone"
     }
 }
