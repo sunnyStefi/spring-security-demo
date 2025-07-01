@@ -14,7 +14,7 @@ class UserConfig {
     fun userDetailsService(): UserDetailsService {
         val rickGrimes = User.withUsername("rickGrimes")
             .password("{noop}sheriff123")
-            .roles("LEADER", "HUNTER")
+            .roles("LEADER")
             .build()
 
         val darylDixon = User.withUsername("darylDixon")
