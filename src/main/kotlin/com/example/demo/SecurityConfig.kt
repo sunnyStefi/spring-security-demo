@@ -1,38 +1,26 @@
     package com.example.demo
 
-    import org.springframework.context.ApplicationListener
     import org.springframework.context.annotation.Bean
     import org.springframework.context.annotation.Configuration
-    import org.springframework.security.authentication.event.AuthenticationSuccessEvent
-    import org.springframework.security.config.Customizer
     import org.springframework.security.config.annotation.web.builders.HttpSecurity
     import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
     import org.springframework.security.web.SecurityFilterChain
-    import org.springframework.security.web.authentication.AuthenticationFilter
 
     @Configuration
-    @EnableWebSecurity
-    class SecurityConfig {
+        @EnableWebSecurity
+        class SecurityConfig {
 
-        @Bean
-        fun securityFilterChain(http: HttpSecurity,
-                                hunterAuthenticationProvider: HunterAuthenticationProvider,
-                                safeZoneFilter: SafeZoneFilter): SecurityFilterChain {
-            http
-                .authorizeHttpRequests {
-                    c -> c.requestMatchers("/private").authenticated()
-                    .anyRequest().permitAll()
-                }
-                //.httpBasic(Customizer.withDefaults())
-                .authenticationProvider(hunterAuthenticationProvider)
-                .addFilterAfter(safeZoneFilter, AuthenticationFilter::class.java)
-                .oauth2Login(Customizer.withDefaults())
+            @Bean
+            fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
+                http
+                    .authorizeHttpRequests {
+                        c -> c.requestMatchers("/private").authenticated()
+                        .anyRequest().permitAll()
+                    }
+                    .httpBasic { c -> c.authenticationEntryPoint(ZombieEntryPoint())}
+                    .formLogin { c -> c.successHandler(SafeZoneSuccessHandler()) }
 
-            return http.build()
-        }
-
-        @Bean
-        fun authenticationSuccessListener(): ApplicationListener<AuthenticationSuccessEvent> =
-            ApplicationListener { event -> println("Successfully authenticated with ${event.authentication.javaClass.simpleName} 🎉") }
+                return http.build()
+            }
 
     }
