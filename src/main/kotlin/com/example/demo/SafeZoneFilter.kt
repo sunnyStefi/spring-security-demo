@@ -3,17 +3,14 @@ package com.example.demo
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.AuthenticationException
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.core.userdetails.UserDetailsService
-import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
 class SafeZoneFilter(
-    private val userDetailsService: UserDetailsService
+    private val authenticationManager: HunterAuthenticationProvider
 ) : OncePerRequestFilter() {
 
     companion object {
@@ -27,36 +24,23 @@ class SafeZoneFilter(
         filterChain: FilterChain
     ) {
         val safeZoneHeaderValue = request.getHeader(SAFE_ZONE_HEADER)
-        val authenticationName = SecurityContextHolder.getContext().authentication?.name
 
-        if (authenticationName.isNullOrEmpty()) {
-            response.status = HttpServletResponse.SC_UNAUTHORIZED
-            response.writer.write("Missing user ⛔️")
+        if (safeZoneHeaderValue != SAFE_ZONE_SECRET) {
+            filterChain.doFilter(request, response)
             return
         }
 
-        val userDetails = try {
-            userDetailsService.loadUserByUsername(authenticationName)
-        } catch (ex: UsernameNotFoundException) {
-            response.status = HttpServletResponse.SC_UNAUTHORIZED
-            response.writer.write("Unknown user ⛔️")
-            return
-        }
+        val unauthenticatedEntity = HunterAuthentication.unauthenticated(safeZoneHeaderValue)
 
-        val hasHunterRole = userDetails.authorities.any { it.authority == "ROLE_HUNTER" }
+        try {
+            val authentication = authenticationManager.authenticate(unauthenticatedEntity)
 
-        if (safeZoneHeaderValue == SAFE_ZONE_SECRET && hasHunterRole) {
-            SecurityContextHolder.getContext().authentication =
-                UsernamePasswordAuthenticationToken(
-                    authenticationName,
-                    null,
-                    userDetails.authorities + SimpleGrantedAuthority("ROLE_SAFE_ZONE")
-                )
+            SecurityContextHolder.getContext().authentication = authentication
 
             filterChain.doFilter(request, response)
-        } else {
-            response.status = HttpServletResponse.SC_UNAUTHORIZED
-            response.writer.write("You are not authorized to access the safe zone ⛔️")
+        } catch (ex: AuthenticationException) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")
         }
     }
 }
+
