@@ -22,6 +22,11 @@ class UserConfig {
             .roles("HUNTER")
             .build()
 
-        return InMemoryUserDetailsManager(rickGrimes, darylDixon)
+        val karenNagsworth = User.withUsername("karenNagsworth")
+            .password("{noop}blah123")
+            .roles("CITIZEN")
+            .build()
+
+        return InMemoryUserDetailsManager(rickGrimes, darylDixon, karenNagsworth)
     }
 }
