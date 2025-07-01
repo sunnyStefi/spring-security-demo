@@ -19,6 +19,7 @@ class SecurityConfig {
                 .anyRequest().permitAll()
             }
             .httpBasic(Customizer.withDefaults())
+            .oauth2Login(Customizer.withDefaults())
         return http.build()
     }
 }
