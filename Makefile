@@ -16,4 +16,4 @@ custom-provider:
 
 ## 5 configurer
 configurer-basic:
-	curl -vu rickGrimes:sheriff123 http://localhost:8080/private
+	curl -vu rickGrimes:sheriff1234 http://localhost:8080/private
