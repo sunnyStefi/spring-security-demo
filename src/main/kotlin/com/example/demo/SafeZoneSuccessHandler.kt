@@ -17,9 +17,9 @@ class SafeZoneSuccessHandler : AuthenticationSuccessHandler {
         }
 
         if (hasHunterRole) {
-            response.sendRedirect("/safe-zone")
+            response.sendRedirect("safe-zone")
         } else {
-            response.sendRedirect("/zombie-zone")
+            response.sendRedirect("beach-zone")
         }
     }
 }

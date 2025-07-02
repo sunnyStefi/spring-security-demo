@@ -13,7 +13,7 @@ class ZombieEntryPoint : AuthenticationEntryPoint {
         response: HttpServletResponse?,
         authException: AuthenticationException?
     ) {
-        response?.setHeader("X-not-allowed", "Zombies and Enemies are not allowed to enter the safe zone")
+        response?.setHeader("X-not-allowed", "Zombies are not allowed to the Safe zone")
         response?.sendError(HttpStatus.UNAUTHORIZED.value())
     }
 }
