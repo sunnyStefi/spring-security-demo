@@ -3,7 +3,6 @@ package com.example.demo
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
@@ -12,13 +11,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
-/**
- * Filter that adds the ROLE_SAFE_ZONE authority to authenticated users who:
- * 1. Have the ROLE_HUNTER authority
- * 2. Provide the correct safe zone secret in the x-safe-zone header
- *
- * This filter should be placed after authentication filters in the chain.
- */
 @Component
 class SafeZoneFilter(
     private val userDetailsService: UserDetailsService
@@ -59,7 +51,7 @@ class SafeZoneFilter(
             filterChain.doFilter(request, response)
         } else {
             response.status = HttpServletResponse.SC_UNAUTHORIZED
-            response.writer.write("You are not authorized to access the safe zone")
+            response.writer.write("You'll not be safe here!! Run")
             return
         }
 

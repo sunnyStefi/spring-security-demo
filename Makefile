@@ -10,3 +10,9 @@ custom-users:
 custom-filter:
 	curl -vu rickGrimes:sheriff123 -H "x-safe-zone:123" http://localhost:8080/private
 
+custom-filter-fail:
+	curl -vu rickGrimes:sheriff123 -H "x-safe-zone:1234" http://localhost:8080/private
+
+custom-filter-401:
+	curl -vu rickGrimes:sheriff1234 -H "x-safe-zone:123" http://localhost:8080/private
+
