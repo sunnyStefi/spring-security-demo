@@ -10,7 +10,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
 class SafeZoneFilter(
-    private val authenticationManager: HunterAuthenticationProvider
+    private val authenticationProvider: HunterAuthenticationProvider
 ) : OncePerRequestFilter() {
 
     companion object {
@@ -26,14 +26,14 @@ class SafeZoneFilter(
         val safeZoneHeaderValue = request.getHeader(SAFE_ZONE_HEADER)
 
         if (safeZoneHeaderValue != SAFE_ZONE_SECRET) {
-            filterChain.doFilter(request, response)
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: Invalid safe zone secret")
             return
         }
 
         val unauthenticatedEntity = HunterAuthentication.unauthenticated(safeZoneHeaderValue)
 
         try {
-            val authentication = authenticationManager.authenticate(unauthenticatedEntity)
+            val authentication = authenticationProvider.authenticate(unauthenticatedEntity)
 
             SecurityContextHolder.getContext().authentication = authentication
 
@@ -43,4 +43,3 @@ class SafeZoneFilter(
         }
     }
 }
-

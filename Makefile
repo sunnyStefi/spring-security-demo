@@ -13,3 +13,6 @@ custom-filter:
 ## 4 custom-provider
 custom-provider:
 	curl -H "x-safe-zone:123" http://localhost:8080/private
+
+custom-provider-401:
+	curl -H "x-safe-zone:1234" http://localhost:8080/private

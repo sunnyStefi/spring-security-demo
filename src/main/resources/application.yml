@@ -1,12 +1,3 @@
-spring:
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: xxx
-            client-secret: xxx
-
 logging:
   level:
     org.springframework.security: TRACE

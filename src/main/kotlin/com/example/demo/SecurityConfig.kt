@@ -26,7 +26,6 @@
                 //.httpBasic(Customizer.withDefaults())
                 .authenticationProvider(hunterAuthenticationProvider)
                 .addFilterAfter(safeZoneFilter, AuthenticationFilter::class.java)
-                .oauth2Login(Customizer.withDefaults())
 
             return http.build()
         }

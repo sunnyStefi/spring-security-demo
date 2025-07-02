@@ -6,25 +6,25 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class BasicsController {
+class ZoneController {
 
     @GetMapping("/public")
     fun publicEndpoint(): String {
-        return "This is a public endpoint 🌍 - Everyone can access it! 🎉"
+        return "🧟‍♂️ Welcome to the public zone! This area is open for all survivors. Stay alert! ⚠️"
     }
 
     @GetMapping("/private")
     fun privateEndpoint(authentication: Authentication): String {
         val name = getName(authentication)
-        return "This is a private endpoint 🔒 - Hello $name! Only authorized users should access it! ✅"
+        return "🏡Secure bunker access granted to $name. ✅ Only trusted survivors may enter. "
     }
 
     private fun getName(authentication: Authentication): String {
-         if (authentication is OAuth2AuthenticationToken) {
-             val attributes = authentication.principal.attributes
-             val name = attributes["given_name"] as? String ?: "OAuth2 User"
-             return "$name 🔑"
-         }
+        if (authentication is OAuth2AuthenticationToken) {
+            val attributes = authentication.principal.attributes
+            return attributes["given_name"] as String
+        }
         return "${authentication.name} 👤"
     }
+
 }
